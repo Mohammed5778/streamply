@@ -27,7 +27,8 @@ interface PageProps {
   currentUser: User | null; // Pass current user to pages that need it
 }
 
-const FOOTER_HEIGHT_ESTIMATE = '58px'; // For pb-[calc(FOOTER_HEIGHT_ESTIMATE+env(safe-area-inset-bottom))]
+const FOOTER_HEIGHT_RESPONSIVE_PADDING = "pb-[calc(58px+env(safe-area-inset-bottom))] md:pb-[env(safe-area-inset-bottom)]";
+
 
 export const HomePage: React.FC<PageProps> = ({ navigateTo, currentUser }) => {
   const [recommendedVideos, setRecommendedVideos] = useState<Video[]>([]);
@@ -41,9 +42,9 @@ export const HomePage: React.FC<PageProps> = ({ navigateTo, currentUser }) => {
       try {
         setLoading(true);
         setError(null);
-        const recVideos = await firestoreService.getRecommendedVideos(5);
+        const recVideos = await firestoreService.getRecommendedVideos(10); // Increased count for desktop
         setRecommendedVideos(recVideos);
-        const favVideos = await firestoreService.getRecommendedVideos(3); // Fetch different set for demo
+        const favVideos = await firestoreService.getRecommendedVideos(8); // Increased count for desktop
         setFavoriteChannelsVideos(favVideos);
       } catch (err) {
         console.error("Error loading home page data:", err);
@@ -68,7 +69,7 @@ export const HomePage: React.FC<PageProps> = ({ navigateTo, currentUser }) => {
 
   return (
     <div className="flex-grow overflow-y-auto custom-scrollbar">
-      <div className={`sticky top-0 z-10 flex items-center bg-[${THEME_BG_PRIMARY}] p-4 pb-3 justify-between h-[72px]`}>
+      <div className={`sticky top-0 z-10 flex items-center bg-[${THEME_BG_PRIMARY}] p-4 md:px-6 lg:px-8 pb-3 justify-between h-[72px]`}>
         <div className="flex items-center gap-2">
           <div className={`text-[${THEME_YELLOW_PRIMARY}] flex size-8 shrink-0 items-center justify-center rounded-full`}>
             <VideoPlayIcon size="24px" />
@@ -91,7 +92,7 @@ export const HomePage: React.FC<PageProps> = ({ navigateTo, currentUser }) => {
         </div>
       </div>
       <div className={`sticky top-[72px] z-10 bg-[${THEME_BG_PRIMARY}] h-[52px]`}>
-        <div className="flex gap-3 p-4 pt-0 overflow-x-auto whitespace-nowrap no-scrollbar">
+        <div className={`flex gap-3 p-4 md:px-6 lg:px-8 pt-0 overflow-x-auto whitespace-nowrap no-scrollbar`}>
             {HOME_FILTERS.map(filter => (
             <button
                 key={filter}
@@ -106,17 +107,17 @@ export const HomePage: React.FC<PageProps> = ({ navigateTo, currentUser }) => {
             ))}
         </div>
       </div>
-      <section className="px-4 pb-4">
+      <section className="px-4 md:px-6 lg:px-8 pb-4">
         <h2 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-xl font-bold leading-tight tracking-[-0.015em] pb-3 pt-2`}>Recommended</h2>
-        <div className="grid grid-cols-1 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
           {recommendedVideos.length > 0 ? recommendedVideos.map(video => (
             <VideoCard key={video.id} video={video} type="home" onVideoClick={handleVideoClick} onChannelClick={handleChannelClick} />
           )) : <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-center col-span-full`}>No recommended videos found.</p>}
         </div>
       </section>
-      <section className="px-4" style={{paddingBottom: `calc(${FOOTER_HEIGHT_ESTIMATE} + env(safe-area-inset-bottom))`}}>
+      <section className={`px-4 md:px-6 lg:px-8 ${FOOTER_HEIGHT_RESPONSIVE_PADDING}`}>
         <h2 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-xl font-bold leading-tight tracking-[-0.015em] pb-3 pt-2`}>Favorite Channels</h2>
-        <div className="grid grid-cols-1 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
            {favoriteChannelsVideos.length > 0 ? favoriteChannelsVideos.map(video => (
             <VideoCard key={video.id} video={video} type="home" onVideoClick={handleVideoClick} onChannelClick={handleChannelClick} />
           )) : <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-center col-span-full`}>No videos from favorite channels found.</p>}
@@ -168,15 +169,15 @@ export const SearchPage: React.FC<PageProps> = ({ navigateTo, context, currentUs
   return (
     <div className={`flex-grow overflow-y-auto custom-scrollbar text-[${THEME_TEXT_ON_DARK_PRIMARY}]`}>
       <header className="sticky top-0 z-10 backdrop-blur-sm h-[calc(56px+72px)]" style={{backgroundColor: `${searchPageTheme.statusBarColor}CC`}}> {/* CC for ~80% opacity */}
-        <div className="flex items-center p-4 pb-2 justify-between h-[56px]">
+        <div className="flex items-center p-4 md:px-6 lg:px-8 pb-2 justify-between h-[56px]">
           <button onClick={() => navigateTo(context?.previousPageId || 'home', {isBackNavigation: true})} className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-[${THEME_YELLOW_PRIMARY}]/10 transition-colors`}>
             <BackIcon />
           </button>
           <h2 className="text-xl font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Search</h2>
           <div className="size-10 shrink-0"></div>
         </div>
-        <div className="px-4 py-3 h-[72px]">
-          <div className={`flex w-full items-stretch rounded-xl bg-[${THEME_BG_SECONDARY}] h-12`}>
+        <div className="px-4 md:px-6 lg:px-8 py-3 h-[72px]">
+          <div className={`flex w-full max-w-xl mx-auto items-stretch rounded-xl bg-[${THEME_BG_SECONDARY}] h-12`}>
             <div className={`text-[${THEME_YELLOW_PRIMARY}] flex items-center justify-center pl-4`}>
               <MagnifyingGlassIcon size="20px" />
             </div>
@@ -196,7 +197,7 @@ export const SearchPage: React.FC<PageProps> = ({ navigateTo, context, currentUs
           </div>
         </div>
       </header>
-      <main className="px-4 py-3 space-y-3" style={{paddingBottom: `calc(${FOOTER_HEIGHT_ESTIMATE} + env(safe-area-inset-bottom))`}}>
+      <main className={`px-4 md:px-6 lg:px-8 py-3 space-y-3 max-w-3xl mx-auto ${FOOTER_HEIGHT_RESPONSIVE_PADDING}`}>
         <h3 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-lg font-semibold leading-tight tracking-[-0.015em] pb-1 pt-2`}>
           {results.length > 0 || loading || error ? 'Search Results' : 'Top results'}
         </h3>
@@ -293,8 +294,8 @@ export const VideoPage: React.FC<PageProps> = ({ navigateTo, context, currentUse
   if (!video) return <ErrorMessage message="Video data could not be loaded." />;
 
   return (
-    <div className={`flex-grow overflow-y-auto text-[${THEME_TEXT_ON_DARK_PRIMARY}]`}>
-       <div style={{backgroundColor: videoPageTheme.statusBarColor}} className={`flex items-center p-4 pb-2 justify-between sticky top-0 z-50 h-[56px]`}>
+    <div className={`flex-grow overflow-y-auto custom-scrollbar text-[${THEME_TEXT_ON_DARK_PRIMARY}] lg:overflow-y-visible ${FOOTER_HEIGHT_RESPONSIVE_PADDING}`}>
+       <div style={{backgroundColor: videoPageTheme.statusBarColor}} className={`flex items-center p-4 md:px-6 lg:px-0 pb-2 justify-between sticky top-0 z-50 h-[56px] lg:max-w-screen-2xl lg:mx-auto`}>
           <button onClick={() => navigateTo(context?.previousPageId || 'home', {isBackNavigation: true})} className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-[${THEME_BG_TERTIARY_HOVER}] transition-colors`}>
               <BackIcon />
           </button>
@@ -304,97 +305,103 @@ export const VideoPage: React.FC<PageProps> = ({ navigateTo, context, currentUse
               </button>
           </div>
       </div>
-      <div className="relative flex items-center justify-center bg-cover bg-center aspect-video bg-black">
-          <video
-            src={video.videoUrl || PLACEHOLDER_VIDEO_URL}
-            poster={video.thumbnailUrl || PLACEHOLDER_THUMBNAIL}
-            controls
-            className="w-full h-full"
-            autoPlay={false}
-          />
-      </div>
-      <div className="p-4 space-y-1">
-          <h1 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-xl font-bold leading-tight tracking-tight`}>{video.title}</h1>
-          <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-sm font-normal leading-normal`}>{formatViews(video.views)} views · {formatFirestoreTimestamp(video.uploadDate)}</p>
-          {video.description && <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-sm mt-2 whitespace-pre-wrap`}>{video.description}</p>}
-      </div>
+      
+      <div className="lg:flex lg:gap-6 max-w-screen-2xl mx-auto lg:px-4">
+        <div className="lg:w-2/3 lg:flex-grow"> {/* Main content column (video, desc, comments) */}
+          <div className="relative flex items-center justify-center bg-cover bg-center aspect-video bg-black lg:rounded-xl lg:overflow-hidden">
+              <video
+                src={video.videoUrl || PLACEHOLDER_VIDEO_URL}
+                poster={video.thumbnailUrl || PLACEHOLDER_THUMBNAIL}
+                controls
+                className="w-full h-full"
+                autoPlay={false}
+              />
+          </div>
+          <div className="p-4 space-y-1">
+              <h1 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-xl md:text-2xl font-bold leading-tight tracking-tight`}>{video.title}</h1>
+              <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-sm font-normal leading-normal`}>{formatViews(video.views)} views · {formatFirestoreTimestamp(video.uploadDate)}</p>
+              {video.description && <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-sm mt-2 whitespace-pre-wrap`}>{video.description}</p>}
+          </div>
 
-      {/* Action Buttons Row */}
-      <div className={`flex items-center gap-2 px-4 py-2 overflow-x-auto no-scrollbar bg-[${videoPageTheme.bodyBgColor}] border-t border-b border-[${THEME_BORDER_PRIMARY}]`}>
-          <button
-            onClick={handleLike}
-            className={`flex items-center gap-2 p-2.5 rounded-full text-[${isLiked ? THEME_YELLOW_PRIMARY : THEME_TEXT_ON_DARK_PRIMARY}] bg-[${THEME_BG_SECONDARY}] hover:bg-[${THEME_BG_TERTIARY_HOVER}] transition-colors`}
-            aria-pressed={isLiked}
-            title="Like"
-          >
-              <ThumbsUpIcon isFilled={isLiked} />
-              <span className="text-sm font-medium">{formatViews(video.likes)}</span>
-          </button>
-          <button
-            onClick={handleDislike}
-            className={`flex items-center gap-1 p-2.5 rounded-full text-[${isDisliked ? THEME_YELLOW_PRIMARY : THEME_TEXT_ON_DARK_PRIMARY}] bg-[${THEME_BG_SECONDARY}] hover:bg-[${THEME_BG_TERTIARY_HOVER}] transition-colors`}
-            aria-pressed={isDisliked}
-            title="Dislike"
-          >
-              <ThumbsDownIcon isFilled={isDisliked} />
-          </button>
-          <button
-            onClick={handleShare}
-            className={`flex items-center gap-2 p-2.5 rounded-full text-[${THEME_TEXT_ON_DARK_PRIMARY}] bg-[${THEME_BG_SECONDARY}] hover:bg-[${THEME_BG_TERTIARY_HOVER}] transition-colors`}
-            title="Share"
-          >
-              <ShareIcon />
-              <span className="text-sm font-medium">Share</span>
-          </button>
-          <button
-            onClick={handleSave}
-            className={`flex items-center gap-2 p-2.5 rounded-full text-[${THEME_TEXT_ON_DARK_PRIMARY}] bg-[${THEME_BG_SECONDARY}] hover:bg-[${THEME_BG_TERTIARY_HOVER}] transition-colors`}
-            title="Save"
-          >
-              <PlaylistAddIcon />
-              <span className="text-sm font-medium">Save</span>
-          </button>
-           <button className={`flex items-center p-2.5 rounded-full text-[${THEME_TEXT_ON_DARK_PRIMARY}] bg-[${THEME_BG_SECONDARY}] hover:bg-[${THEME_BG_TERTIARY_HOVER}] transition-colors`} title="More options">
-                <MoreVertIcon />
-            </button>
-      </div>
+          {/* Action Buttons Row */}
+          <div className={`flex items-center gap-2 px-4 py-2 overflow-x-auto no-scrollbar lg:overflow-x-visible bg-[${videoPageTheme.bodyBgColor}] border-t border-b border-[${THEME_BORDER_PRIMARY}]`}>
+              <button
+                onClick={handleLike}
+                className={`flex items-center gap-2 p-2.5 rounded-full text-[${isLiked ? THEME_YELLOW_PRIMARY : THEME_TEXT_ON_DARK_PRIMARY}] bg-[${THEME_BG_SECONDARY}] hover:bg-[${THEME_BG_TERTIARY_HOVER}] transition-colors`}
+                aria-pressed={isLiked}
+                title="Like"
+              >
+                  <ThumbsUpIcon isFilled={isLiked} />
+                  <span className="text-sm font-medium">{formatViews(video.likes)}</span>
+              </button>
+              <button
+                onClick={handleDislike}
+                className={`flex items-center gap-1 p-2.5 rounded-full text-[${isDisliked ? THEME_YELLOW_PRIMARY : THEME_TEXT_ON_DARK_PRIMARY}] bg-[${THEME_BG_SECONDARY}] hover:bg-[${THEME_BG_TERTIARY_HOVER}] transition-colors`}
+                aria-pressed={isDisliked}
+                title="Dislike"
+              >
+                  <ThumbsDownIcon isFilled={isDisliked} />
+              </button>
+              <button
+                onClick={handleShare}
+                className={`flex items-center gap-2 p-2.5 rounded-full text-[${THEME_TEXT_ON_DARK_PRIMARY}] bg-[${THEME_BG_SECONDARY}] hover:bg-[${THEME_BG_TERTIARY_HOVER}] transition-colors`}
+                title="Share"
+              >
+                  <ShareIcon />
+                  <span className="text-sm font-medium">Share</span>
+              </button>
+              <button
+                onClick={handleSave}
+                className={`flex items-center gap-2 p-2.5 rounded-full text-[${THEME_TEXT_ON_DARK_PRIMARY}] bg-[${THEME_BG_SECONDARY}] hover:bg-[${THEME_BG_TERTIARY_HOVER}] transition-colors`}
+                title="Save"
+              >
+                  <PlaylistAddIcon />
+                  <span className="text-sm font-medium">Save</span>
+              </button>
+              <button className={`flex items-center p-2.5 rounded-full text-[${THEME_TEXT_ON_DARK_PRIMARY}] bg-[${THEME_BG_SECONDARY}] hover:bg-[${THEME_BG_TERTIARY_HOVER}] transition-colors`} title="More options">
+                    <MoreVertIcon />
+                </button>
+          </div>
 
-      <div style={{backgroundColor: videoPageTheme.bodyBgColor}} className={`flex items-center gap-3 px-4 py-3 border-b border-[${THEME_BORDER_PRIMARY}]`}>
-          <div className="flex items-center gap-3 flex-1 cursor-pointer" onClick={handleChannelNavigation}>
-              <div className="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-10 w-10 shrink-0" style={{ backgroundImage: `url("${video.channelAvatarUrl || PLACEHOLDER_AVATAR}")` }}></div>
-              <div className='flex flex-col'>
-                <p className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-base font-medium leading-normal flex-1 truncate`}>{video.channelName || 'Channel Name'}</p>
-                <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-xs`}>{formatViews(video.channelSubscribersCount)} subscribers</p>
+          <div style={{backgroundColor: videoPageTheme.bodyBgColor}} className={`flex items-center gap-3 px-4 py-3 border-b border-[${THEME_BORDER_PRIMARY}]`}>
+              <div className="flex items-center gap-3 flex-1 cursor-pointer" onClick={handleChannelNavigation}>
+                  <div className="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-10 w-10 shrink-0" style={{ backgroundImage: `url("${video.channelAvatarUrl || PLACEHOLDER_AVATAR}")` }}></div>
+                  <div className='flex flex-col'>
+                    <p className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-base font-medium leading-normal flex-1 truncate`}>{video.channelName || 'Channel Name'}</p>
+                    <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-xs`}>{formatViews(video.channelSubscribersCount)} subscribers</p>
+                  </div>
+              </div>
+              <div className="shrink-0">
+                  <button
+                    onClick={handleSubscribe}
+                    className={`flex min-w-[100px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-9 px-4 text-sm font-semibold leading-normal tracking-tight transition-all
+                    ${isSubscribed ? `bg-[${THEME_BG_SECONDARY}] text-[${THEME_TEXT_ON_DARK_SECONDARY}] hover:bg-[${THEME_BG_TERTIARY_HOVER}]` : `bg-[${THEME_YELLOW_PRIMARY}] text-[${THEME_YELLOW_BUTTON_TEXT}] hover:opacity-90`}`}
+                  >
+                      <span className="truncate">{isSubscribed ? 'Subscribed' : 'Subscribe'}</span>
+                  </button>
               </div>
           </div>
-          <div className="shrink-0">
-              <button
-                onClick={handleSubscribe}
-                className={`flex min-w-[100px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-9 px-4 text-sm font-semibold leading-normal tracking-tight transition-all
-                ${isSubscribed ? `bg-[${THEME_BG_SECONDARY}] text-[${THEME_TEXT_ON_DARK_SECONDARY}] hover:bg-[${THEME_BG_TERTIARY_HOVER}]` : `bg-[${THEME_YELLOW_PRIMARY}] text-[${THEME_YELLOW_BUTTON_TEXT}] hover:opacity-90`}`}
-              >
-                  <span className="truncate">{isSubscribed ? 'Subscribed' : 'Subscribe'}</span>
-              </button>
-          </div>
-      </div>
 
-      <div className={`px-4 py-3 border-t border-[${THEME_BORDER_PRIMARY}]`} style={{backgroundColor: videoPageTheme.bodyBgColor}}>
-          <div className="flex items-center justify-between mb-3">
-              <h3 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-base font-semibold leading-tight`}>Comments ({commentsCount})</h3>
+          <div className={`px-4 py-3 border-t border-[${THEME_BORDER_PRIMARY}]`} style={{backgroundColor: videoPageTheme.bodyBgColor}}>
+              <div className="flex items-center justify-between mb-3">
+                  <h3 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-base font-semibold leading-tight`}>Comments ({commentsCount})</h3>
+              </div>
+              <div className="space-y-3">
+                  {comments.length > 0 ? comments.map(comment => (
+                      <CommentItem key={comment.id} comment={comment} />
+                  )) : <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-center`}>No comments yet.</p>}
+              </div>
           </div>
-          <div className="space-y-3">
-              {comments.length > 0 ? comments.map(comment => (
-                  <CommentItem key={comment.id} comment={comment} />
-              )) : <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-center`}>No comments yet.</p>}
-          </div>
-      </div>
-      <div className={`border-t border-[${THEME_BORDER_PRIMARY}] pt-4`} style={{backgroundColor: videoPageTheme.bodyBgColor, paddingBottom: `calc(${FOOTER_HEIGHT_ESTIMATE} + env(safe-area-inset-bottom))`}}>
-          <h3 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-lg font-semibold leading-tight tracking-tight px-4 pb-2`}>Up Next</h3>
+        </div>
+
+        <div className={`lg:w-1/3 lg:max-w-sm lg:shrink-0 lg:sticky lg:top-[calc(56px+env(safe-area-inset-top))] lg:h-[calc(100vh-56px-env(safe-area-inset-top)-env(safe-area-inset-bottom))] lg:overflow-y-auto custom-scrollbar border-t lg:border-t-0 border-[${THEME_BORDER_PRIMARY}] lg:pt-0`} style={{backgroundColor: videoPageTheme.bodyBgColor}}>
+          <h3 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-lg font-semibold leading-tight tracking-tight px-4 pb-2 pt-4 lg:pt-0`}>Up Next</h3>
           <div className="space-y-0">
             {upNext.length > 0 ? upNext.map(nextVideo => (
               <VideoCard key={nextVideo.id} video={nextVideo} type="upNext" onVideoClick={handleUpNextVideoClick} />
             )) : <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-center px-4`}>No more videos.</p>}
           </div>
+        </div>
       </div>
     </div>
   );
@@ -450,7 +457,7 @@ export const LibraryPage: React.FC<PageProps> = ({ navigateTo, currentUser }) =>
   return (
     <div className={`flex-grow overflow-y-auto text-[${THEME_TEXT_ON_DARK_PRIMARY}]`}>
       <header className="sticky top-0 z-10 backdrop-blur-sm h-[60px]" style={{backgroundColor: `${libraryPageTheme.statusBarColor}CC`}}> {/* CC for ~80% opacity */}
-          <div className="flex items-center p-4 pb-3 justify-between">
+          <div className="flex items-center p-4 md:px-6 lg:px-8 pb-3 justify-between">
               <div className="w-12"></div>
               <h1 className={`text-xl font-bold text-[${THEME_TEXT_ON_DARK_PRIMARY}] tracking-tight flex-1 text-center`}>Library</h1>
               <div className="flex w-12 items-center justify-end">
@@ -460,7 +467,7 @@ export const LibraryPage: React.FC<PageProps> = ({ navigateTo, currentUser }) =>
               </div>
           </div>
       </header>
-      <main className="px-4 pt-4" style={{paddingBottom: `calc(${FOOTER_HEIGHT_ESTIMATE} + env(safe-area-inset-bottom))`}}>
+      <main className={`px-4 md:px-6 lg:px-8 pt-4 max-w-4xl mx-auto ${FOOTER_HEIGHT_RESPONSIVE_PADDING}`}>
           <section className="mb-6">
               <h2 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-lg font-semibold leading-tight tracking-[-0.01em] mb-3`}>Playlists</h2>
               <ul className="space-y-1">
@@ -531,7 +538,7 @@ export const ChannelPage: React.FC<PageProps> = ({ navigateTo, context, currentU
   return (
     <div className={`flex-grow overflow-y-auto text-[${THEME_TEXT_ON_DARK_PRIMARY}]`}>
        <header className="sticky top-0 z-20 backdrop-blur-md h-[71px]" style={{backgroundColor: `${channelPageTheme.statusBarColor}CC`}}>
-          <div className="flex items-center p-4 pb-3 justify-between">
+          <div className="flex items-center p-4 md:px-6 lg:px-8 pb-3 justify-between">
               <button onClick={() => navigateTo(context?.previousPageId || 'home', {isBackNavigation: true})} className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-[${THEME_BG_TERTIARY_HOVER}] transition-colors`}>
                   <BackIcon />
               </button>
@@ -540,16 +547,16 @@ export const ChannelPage: React.FC<PageProps> = ({ navigateTo, context, currentU
       </header>
       <main className="flex flex-col">
         {channel.bannerUrl && (
-            <img src={channel.bannerUrl} alt={`${channel.name} banner`} className="w-full h-32 sm:h-40 md:h-48 object-cover" />
+            <img src={channel.bannerUrl} alt={`${channel.name} banner`} className="w-full h-32 sm:h-40 md:h-48 lg:h-64 object-cover" />
         )}
         <ChannelHeader channel={channel} onSubscribe={handleSubscribe} isSubscribed={isSubscribed} />
         <div className={`pb-0 sticky top-[71px] z-10 backdrop-blur-md border-b border-[${THEME_BORDER_PRIMARY}] h-[49px]`} style={{backgroundColor: `${channelPageTheme.bodyBgColor}CC`}}>
-            <div className="flex px-2 gap-1 overflow-x-auto whitespace-nowrap no-scrollbar">
+            <div className="flex px-2 md:px-4 md:justify-center gap-1 overflow-x-auto whitespace-nowrap no-scrollbar md:overflow-x-visible">
                 {CHANNEL_TABS.map(tab => (
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
-                        className={`flex-grow basis-0 text-center py-3 px-2 text-sm font-medium border-b-2 transition-all duration-200 ease-in-out
+                        className={`flex-grow basis-0 md:flex-grow-0 md:basis-auto text-center py-3 px-2 md:px-4 text-sm font-medium border-b-2 transition-all duration-200 ease-in-out
                             ${activeTab === tab
                                 ? `border-[${THEME_YELLOW_PRIMARY}] text-[${THEME_YELLOW_PRIMARY}]`
                                 : `border-transparent text-[${THEME_TEXT_ON_DARK_SECONDARY}] hover:text-[${THEME_TEXT_ON_DARK_PRIMARY}] hover:border-[${THEME_YELLOW_PRIMARY}]/50`}`}
@@ -560,9 +567,9 @@ export const ChannelPage: React.FC<PageProps> = ({ navigateTo, context, currentU
             </div>
         </div>
         {activeTab === 'Videos' && (
-          <div style={{paddingBottom: `calc(${FOOTER_HEIGHT_ESTIMATE} + env(safe-area-inset-bottom))`}}>
-            <h3 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-xl font-bold leading-tight tracking-tight px-4 pb-3 pt-5`}>Uploads</h3>
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-4 p-4 pt-0">
+          <div className={`${FOOTER_HEIGHT_RESPONSIVE_PADDING}`}>
+            <h3 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-xl font-bold leading-tight tracking-tight px-4 md:px-6 lg:px-8 pb-3 pt-5`}>Uploads</h3>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-x-3 gap-y-5 p-4 md:p-6 lg:p-8 pt-0">
               {videos.length > 0 ? videos.map(video => (
                 <VideoCard key={video.id} video={video} type="channel" onVideoClick={handleVideoClick} />
               )) : <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-center col-span-full py-8`}>This channel has no videos yet.</p>}
@@ -570,7 +577,7 @@ export const ChannelPage: React.FC<PageProps> = ({ navigateTo, context, currentU
           </div>
         )}
         {activeTab !== 'Videos' && (
-          <div className={`p-8 text-center text-[${THEME_TEXT_ON_DARK_SECONDARY}]`} style={{paddingBottom: `calc(${FOOTER_HEIGHT_ESTIMATE} + env(safe-area-inset-bottom))`}}>Content for {activeTab} coming soon.</div>
+          <div className={`p-8 text-center text-[${THEME_TEXT_ON_DARK_SECONDARY}] ${FOOTER_HEIGHT_RESPONSIVE_PADDING}`}>Content for {activeTab} coming soon.</div>
         )}
       </main>
     </div>
@@ -628,7 +635,7 @@ export const ShortsPage: React.FC<PageProps> = ({ navigateTo, currentUser }) => 
 
   return (
     <div className={`flex flex-col h-screen bg-[${THEME_BLACK_FOR_SHORTS}] text-white`}>
-      <header className={`sticky top-0 z-50 flex items-center bg-[${THEME_BLACK_FOR_SHORTS}] p-4 pb-2 justify-between h-[56px]`}>
+      <header className={`sticky top-0 z-50 flex items-center bg-[${THEME_BLACK_FOR_SHORTS}] p-4 md:px-6 lg:px-8 pb-2 justify-between h-[56px]`}>
         <button className="flex items-center justify-center text-white h-10 w-10 hover:bg-white/10 rounded-full transition-colors" onClick={() => navigateTo('search')}>
           <MagnifyingGlassIcon className="text-2xl" />
         </button>
@@ -640,7 +647,7 @@ export const ShortsPage: React.FC<PageProps> = ({ navigateTo, currentUser }) => 
 
       <main className="flex-grow overflow-y-auto no-scrollbar relative" onClick={togglePlay}>
         <div
-          className="relative flex items-center justify-center bg-black"
+          className="relative flex items-center justify-center bg-black md:max-w-xs lg:max-w-sm mx-auto"
           style={{ height: 'calc(100vh - 56px - 50px - env(safe-area-inset-top) - env(safe-area-inset-bottom))' }}
         >
           <video
@@ -822,9 +829,9 @@ export const AuthPage: React.FC<PageProps> = ({ navigateTo, context, currentUser
   const pageTheme = PAGE_THEMES['auth'];
 
   return (
-    <div className={`flex-grow flex flex-col items-center justify-center text-[${THEME_TEXT_ON_DARK_PRIMARY}] p-4`}>
+    <div className={`flex-grow flex flex-col items-center justify-center text-[${THEME_TEXT_ON_DARK_PRIMARY}] p-4 ${FOOTER_HEIGHT_RESPONSIVE_PADDING}`}>
         <header className="absolute top-0 left-0 right-0 z-10 w-full h-[60px]" style={{backgroundColor: `${pageTheme.statusBarColor}CC`}}>
-            <div className="flex items-center p-4 pb-3 justify-start">
+            <div className="flex items-center p-4 md:px-6 lg:px-8 pb-3 justify-start">
                 {(context?.previousPageId && !currentUser) && ( 
                     <button onClick={() => navigateTo(context.previousPageId || 'home', {isBackNavigation: true})} className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-[${THEME_BG_TERTIARY_HOVER}] transition-colors`}>
                         <BackIcon />
@@ -977,7 +984,7 @@ export const CreatePage: React.FC<PageProps> = ({ navigateTo, context, currentUs
         switchSection('createChannelForm'); // Fallback to create form on error
       })
       .finally(() => setLoading(false));
-  }, [currentUser, navigateTo]); // Removed context to avoid loop if context is unstable
+  }, [currentUser, navigateTo, context]); 
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -1150,7 +1157,7 @@ export const CreatePage: React.FC<PageProps> = ({ navigateTo, context, currentUs
   return (
     <div className={`flex-grow flex flex-col text-[${THEME_TEXT_ON_DARK_PRIMARY}]`}>
       <header className="sticky top-0 z-10 w-full backdrop-blur-sm h-[71px]" style={{backgroundColor: `${pageTheme.statusBarColor}CC`}}>
-        <div className="flex items-center p-4 pb-3 justify-between">
+        <div className="flex items-center p-4 md:px-6 lg:px-8 pb-3 justify-between">
           <button onClick={() => {
               if (activeSection !== 'menu' && activeSection !== 'createChannelForm' && userChannel) {
                   switchSection('menu');
@@ -1171,7 +1178,7 @@ export const CreatePage: React.FC<PageProps> = ({ navigateTo, context, currentUs
         </div>
       </header>
 
-      <main className="flex-grow flex flex-col items-center p-6 space-y-6 overflow-y-auto custom-scrollbar" style={{paddingBottom: `calc(${FOOTER_HEIGHT_ESTIMATE} + env(safe-area-inset-bottom))`}}>
+      <main className={`flex-grow flex flex-col items-center p-6 space-y-6 overflow-y-auto custom-scrollbar ${FOOTER_HEIGHT_RESPONSIVE_PADDING}`}>
         {error && <ErrorMessage message={error} />}
         {actionLoading && <div className="my-4"><LoadingSpinner /></div>}
 
@@ -1275,20 +1282,20 @@ export const CreatePage: React.FC<PageProps> = ({ navigateTo, context, currentUs
 
 
 export const PlaceholderPage: React.FC<{ title: string; navigateTo: (page: PageId, context?: PageContext) => void; context?: PageContext; currentUser: User | null }> = ({ title, navigateTo, context, currentUser }) => (
-  <div className={`flex-grow flex flex-col items-center justify-center text-[${THEME_TEXT_ON_DARK_PRIMARY}]`}>
+  <div className={`flex-grow flex flex-col text-[${THEME_TEXT_ON_DARK_PRIMARY}]`}>
      <header className="sticky top-0 z-10 w-full h-[60px]" style={{backgroundColor: `${PAGE_THEMES[context?.previousPageId || 'home'].statusBarColor}CC`}}>
-        <div className="flex items-center p-4 pb-3 justify-start">
+        <div className="flex items-center p-4 md:px-6 lg:px-8 pb-3 justify-start">
             <button onClick={() => navigateTo(context?.previousPageId || 'home', {isBackNavigation: true})} className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-[${THEME_BG_TERTIARY_HOVER}] transition-colors`}>
                 <BackIcon />
             </button>
              <h1 className="text-xl font-bold leading-tight tracking-tight flex-1 text-center pr-10">{title}</h1>
         </div>
     </header>
-    <div className="flex-grow flex items-center justify-center">
+    <div className={`flex-grow flex items-center justify-center ${FOOTER_HEIGHT_RESPONSIVE_PADDING}`}>
       <h1 className="text-3xl font-bold">{title} (Coming Soon)</h1>
     </div>
     { title === "Login" && 
-      <div className="p-4 text-center" style={{paddingBottom: `calc(${FOOTER_HEIGHT_ESTIMATE} + env(safe-area-inset-bottom))`}}>
+      <div className={`p-4 text-center ${FOOTER_HEIGHT_RESPONSIVE_PADDING}`}>
         <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}]`}>User authentication is a planned feature.</p>
       </div>
     }

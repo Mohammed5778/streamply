@@ -50,15 +50,16 @@ const NavLink: React.FC<NavLinkProps> = ({
 }) => (
   <button
     onClick={() => navigateTo(page)}
-    className={`flex flex-1 flex-col items-center justify-end gap-0.5 rounded-lg py-1 transition-colors duration-150
+    className={`flex flex-1 flex-col items-center justify-center gap-0.5 rounded-lg py-1.5 px-1 transition-colors duration-150 h-full
       ${isActive ? activeColorClass : inactiveColorClass}
       ${hoverBgClass}`}
     aria-current={isActive ? 'page' : undefined}
   >
-    <div className={`flex size-7 items-center justify-center ${isActive ? activeColorClass : inactiveColorClass}`}>
-      {icon}
+    <div className={`flex items-center justify-center ${isActive ? activeColorClass : inactiveColorClass} w-6 h-6 mb-0.5`}>
+      {/*FIX: Explicitly specify the props type for React.cloneElement to include 'size'. This resolves an issue where TypeScript infers the props type P as 'unknown', leading to an error.*/}
+      {React.cloneElement<{ size?: string }>(icon as React.ReactElement, { size: "22px" })}
     </div>
-    <p className={`text-xs leading-normal tracking-[0.015em] ${isActive ? activeFontWeight : inactiveFontWeight}`}>{label}</p>
+    <p className={`text-[10px] leading-tight tracking-normal ${isActive ? activeFontWeight : inactiveFontWeight}`}>{label}</p>
   </button>
 );
 
@@ -170,7 +171,9 @@ const App: React.FC = () => {
       return null;
     }
     if (currentPage === 'video') {
-        return <div className={`h-[env(safe-area-inset-bottom)]`} style={{backgroundColor: PAGE_THEMES['video'].bodyBgColor}}></div>;
+        // Video page handles its own bottom padding for safe area if footer is hidden
+        const videoPageTheme = PAGE_THEMES['video'] || PAGE_THEMES[DEFAULT_PAGE];
+        return <div className={`h-[env(safe-area-inset-bottom)] md:hidden`} style={{backgroundColor: videoPageTheme.bodyBgColor}}></div>;
     }
 
     let footerBg = `bg-[${THEME_BG_PRIMARY}]`;
@@ -209,8 +212,8 @@ const App: React.FC = () => {
     const navItems = [...navItemsBase, profileOrLibraryNavItem];
 
     return (
-      <div className="sticky bottom-0 z-20">
-        <div className={`flex gap-1 sm:gap-2 border-t ${borderColor} ${footerBg} px-2 sm:px-4 pb-3 pt-2`}> {/* Adjusted gaps and padding */}
+      <div className="sticky bottom-0 z-20 md:hidden"> {/* Hidden on medium screens and up */}
+        <div className={`flex h-[58px] gap-0 sm:gap-1 border-t ${borderColor} ${footerBg} px-1 sm:px-2`}>
           {navItems.map(item => (
             <NavLink
               key={item.page}
