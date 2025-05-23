@@ -1,0 +1,6 @@
+{
+  "name": "Streamr - YouTube Clone",
+  "description": "A YouTube clone application built with React, TypeScript, and Tailwind CSS, featuring video browsing, search, playback, channel pages, and a personal library. Data is managed using Firebase Firestore.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
