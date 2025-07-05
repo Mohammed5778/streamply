@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { User, Video, Channel, Comment as CommentType, Playlist, PageId, PageContext } from './types';
 import { firestoreService } from './services';
@@ -797,7 +796,71 @@ export const AuthPage: React.FC<PageProps> = ({ navigateTo, context, currentUser
     } finally { setLoading(false); }
   };
 
-  const handleGoogleSignIn = () => handleAuthAction(signInWithGoogle);
+  const handleGoogleSignIn = () => {
+    // Call signInWithGoogle directly without wrapping in handleAuthAction
+    // This ensures the popup is triggered immediately from user interaction
+    setLoading(true);
+    setError(null);
+    
+    signInWithGoogle()
+      .then(() => {
+        // Success will be handled by useEffect when currentUser changes
+      })
+      .catch((rawError: any) => {
+        console.error("Auth error:", rawError);
+        let errorCode = rawError.code; 
+        let errorMessage = rawError.message; 
+
+        if (rawError.error && typeof rawError.error === 'object') {
+          if (!errorCode && rawError.error.message) {
+              errorMessage = rawError.error.message;
+              if (rawError.error.message === 'INVALID_LOGIN_CREDENTIALS') {
+                  errorCode = 'auth/invalid-credential'; 
+              }
+          }
+        } else if (typeof rawError.message === 'string') {
+            try {
+                const parsedMessage = JSON.parse(rawError.message);
+                if (parsedMessage.error && parsedMessage.error.message) {
+                    if(!errorCode) errorMessage = parsedMessage.error.message;
+                    if (parsedMessage.error.message === 'INVALID_LOGIN_CREDENTIALS' && !errorCode) {
+                        errorCode = 'auth/invalid-credential';
+                    }
+                }
+            } catch (e) { /* Not JSON */ }
+        }
+
+        let friendlyMessage = "An unexpected error occurred. Please try again.";
+        switch (errorCode) {
+          case 'auth/popup-blocked': 
+            friendlyMessage = "Popup was blocked by your browser. Please allow popups for this site and try again."; 
+            break;
+          case 'auth/popup-closed-by-user': 
+            friendlyMessage = "Sign-in was cancelled. Please try again."; 
+            break;
+          case 'auth/cancelled-popup-request': 
+            friendlyMessage = "Another sign-in popup is already open. Please close it and try again."; 
+            break;
+          case 'auth/invalid-email': friendlyMessage = "Please enter a valid email address."; break;
+          case 'auth/user-disabled': friendlyMessage = "This account has been disabled."; break;
+          case 'auth/user-not-found': friendlyMessage = "No account found with this email. Please sign up or check your email."; break;
+          case 'auth/wrong-password': friendlyMessage = "Incorrect password. Please try again."; break;
+          case 'auth/email-already-in-use': friendlyMessage = "An account already exists with this email address."; break;
+          case 'auth/weak-password': friendlyMessage = "Password is too weak. It should be at least 6 characters."; break;
+          case 'auth/requires-recent-login': friendlyMessage = "This action requires a recent login. Please sign out and sign in again."; break;
+          case 'auth/invalid-credential':  friendlyMessage = "Invalid login credentials. Please check your email and password, or sign up if you don't have an account."; break;
+          default:
+              if (errorMessage && (errorMessage !== rawError.message || !rawError.code)) { friendlyMessage = errorMessage; } 
+              else if (rawError.message) { friendlyMessage = rawError.message; }
+              break;
+        }
+        setError(friendlyMessage);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   const handleEmailSignIn = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) { setError("Email and password cannot be empty."); return; }
