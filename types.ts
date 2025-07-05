@@ -1,3 +1,4 @@
+
 import { Timestamp } from 'firebase/firestore'; // Assuming v9, for v8 it's firebase.firestore.Timestamp
 
 // New User interface for Firebase Auth user
@@ -36,7 +37,6 @@ export interface Channel {
   subscribersCount: number | string;
   videoCount: number | string;
   ownerId?: string; // Added to link channel to a user
-  description?: string; // Added for channel description
   // Add other fields
 }
 

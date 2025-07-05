@@ -3,10 +3,10 @@ import { User, Video, Channel, Comment as CommentType, Playlist, PageId, PageCon
 import { firestoreService } from './services';
 import { signInWithGoogle, signOut as firebaseSignOut, signUpWithEmailPassword, signInWithEmailPassword, uploadFileToStorage, getVideoDurationFromFile } from './firebase'; // Firebase auth functions
 import {
-    LoadingSpinner, ErrorMessage, VideoCard, PlaylistItemCard, CommentItem, ChannelHeader, ChannelCard,
+    LoadingSpinner, ErrorMessage, VideoCard, PlaylistItemCard, CommentItem, ChannelHeader,
     MagnifyingGlassIcon, BackIcon, ClearIcon, SettingsIcon, PlayIcon as VideoPlayIcon,
     ThumbsUpIcon, ThumbsDownIconPhosphor as ThumbsDownIcon, ShareIcon, PlaylistAddIcon, // Using ThumbsDownIconPhosphor
-    MoreVertIcon, CameraIcon, GoogleIcon, UserIcon, SortIcon, GridIcon
+    MoreVertIcon, CameraIcon, GoogleIcon, UserIcon
 } from './components';
 import {
     HOME_FILTERS, CHANNEL_TABS, PLACEHOLDER_AVATAR, PLACEHOLDER_THUMBNAIL, PLACEHOLDER_VIDEO_URL,
@@ -31,7 +31,7 @@ const FOOTER_HEIGHT_RESPONSIVE_PADDING = "pb-[calc(58px+env(safe-area-inset-bott
 
 export const HomePage: React.FC<PageProps> = ({ navigateTo, currentUser }) => {
   const [recommendedVideos, setRecommendedVideos] = useState<Video[]>([]);
-  const [favoriteChannelsData, setFavoriteChannelsData] = useState<{channels: Channel[], videos: Video[]}>({channels: [], videos: []});
+  const [favoriteChannelsVideos, setFavoriteChannelsVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState('All');
@@ -43,18 +43,8 @@ export const HomePage: React.FC<PageProps> = ({ navigateTo, currentUser }) => {
         setError(null);
         const recVideos = await firestoreService.getRecommendedVideos(10); // Increased count for desktop
         setRecommendedVideos(recVideos);
-        
-        // Get favorite channels data (mock data for now)
-        const mockChannels: Channel[] = [
-          { id: 'ch1', name: 'Tech Reviews', avatarUrl: 'https://picsum.photos/64/64?random=1', subscribersCount: '2.5M', videoCount: 150, bannerUrl: '' },
-          { id: 'ch2', name: 'Cooking Master', avatarUrl: 'https://picsum.photos/64/64?random=2', subscribersCount: '1.8M', videoCount: 89, bannerUrl: '' },
-          { id: 'ch3', name: 'Travel Vlogs', avatarUrl: 'https://picsum.photos/64/64?random=3', subscribersCount: '950K', videoCount: 67, bannerUrl: '' },
-          { id: 'ch4', name: 'Music Studio', avatarUrl: 'https://picsum.photos/64/64?random=4', subscribersCount: '3.2M', videoCount: 234, bannerUrl: '' },
-          { id: 'ch5', name: 'Fitness Pro', avatarUrl: 'https://picsum.photos/64/64?random=5', subscribersCount: '1.2M', videoCount: 78, bannerUrl: '' },
-        ];
-        
-        const favVideos = await firestoreService.getRecommendedVideos(8); // Get videos for favorite channels section
-        setFavoriteChannelsData({ channels: mockChannels, videos: favVideos });
+        const favVideos = await firestoreService.getRecommendedVideos(8); // Increased count for desktop
+        setFavoriteChannelsVideos(favVideos);
       } catch (err) {
         console.error("Error loading home page data:", err);
         setError('Failed to load videos. Please try again later.');
@@ -124,40 +114,12 @@ export const HomePage: React.FC<PageProps> = ({ navigateTo, currentUser }) => {
           )) : <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-center col-span-full`}>No recommended videos found.</p>}
         </div>
       </section>
-      
-      {/* Enhanced Favorite Channels Section */}
       <section className={`px-4 md:px-6 lg:px-8 ${FOOTER_HEIGHT_RESPONSIVE_PADDING}`}>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-xl font-bold leading-tight tracking-[-0.015em]`}>Favorite Channels</h2>
-          <button className={`text-[${THEME_YELLOW_PRIMARY}] text-sm font-medium hover:underline`}>
-            View All
-          </button>
-        </div>
-        
-        {/* Channels Row */}
-        <div className="mb-6">
-          <div className="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
-            {favoriteChannelsData.channels.length > 0 ? favoriteChannelsData.channels.map(channel => (
-              <div key={channel.id} className="flex-shrink-0 w-20">
-                <ChannelCard 
-                  channel={channel} 
-                  onChannelClick={handleChannelClick}
-                />
-              </div>
-            )) : (
-              <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-center w-full`}>No favorite channels found.</p>
-            )}
-          </div>
-        </div>
-        
-        {/* Latest Videos from Favorite Channels */}
-        <div>
-          <h3 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-lg font-semibold leading-tight tracking-[-0.015em] mb-3`}>Latest from your subscriptions</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4">
-            {favoriteChannelsData.videos.length > 0 ? favoriteChannelsData.videos.map(video => (
-              <VideoCard key={video.id} video={video} type="favoriteChannels" onVideoClick={handleVideoClick} onChannelClick={handleChannelClick} />
-            )) : <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-center col-span-full`}>No videos from favorite channels found.</p>}
-          </div>
+        <h2 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-xl font-bold leading-tight tracking-[-0.015em] pb-3 pt-2`}>Favorite Channels</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+           {favoriteChannelsVideos.length > 0 ? favoriteChannelsVideos.map(video => (
+            <VideoCard key={video.id} video={video} type="home" onVideoClick={handleVideoClick} onChannelClick={handleChannelClick} />
+          )) : <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-center col-span-full`}>No videos from favorite channels found.</p>}
         </div>
       </section>
     </div>
@@ -532,12 +494,9 @@ export const ChannelPage: React.FC<PageProps> = ({ navigateTo, context, currentU
   const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState('Home'); 
-  const [sortBy, setSortBy] = useState('Latest');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [activeTab, setActiveTab] = useState('Videos'); 
   const channelPageTheme = PAGE_THEMES['channel'];
-  const [isSubscribed, setIsSubscribed] = useState(false);
-  const [isNotificationEnabled, setIsNotificationEnabled] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false); 
 
   useEffect(() => {
     if (!channelId) { setError("Channel ID is missing."); setLoading(false); return; }
@@ -563,20 +522,12 @@ export const ChannelPage: React.FC<PageProps> = ({ navigateTo, context, currentU
     }
     navigateTo('video', { videoId });
   }
-  
   const handleSubscribe = () => {
     if (!currentUser) { navigateTo('auth', { intendedPage: 'channel', intendedContext: context }); return; }
     setIsSubscribed(!isSubscribed);
     alert(isSubscribed ? `Unsubscribed from ${channel?.name} (placeholder)` : `Subscribed to ${channel?.name}! (placeholder)`);
   };
 
-  const handleNotificationToggle = () => {
-    if (!currentUser) { navigateTo('auth', { intendedPage: 'channel', intendedContext: context }); return; }
-    setIsNotificationEnabled(!isNotificationEnabled);
-    alert(isNotificationEnabled ? `Notifications turned off for ${channel?.name}` : `Notifications turned on for ${channel?.name}!`);
-  };
-
-  const sortOptions = ['Latest', 'Popular', 'Oldest'];
 
   if (loading) return <LoadingSpinner />;
   if (!loading && !channel && !error) return <ErrorMessage message="Channel not found." />;
@@ -593,20 +544,11 @@ export const ChannelPage: React.FC<PageProps> = ({ navigateTo, context, currentU
               <h2 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-xl font-bold leading-tight tracking-tight flex-1 text-center pr-10`}>{channel.name}</h2>
           </div>
       </header>
-      
       <main className="flex flex-col">
-        {/* Enhanced Channel Header */}
-        <ChannelHeader 
-          channel={channel} 
-          onSubscribe={handleSubscribe} 
-          isSubscribed={isSubscribed}
-          videosCount={videos.length}
-          showNotificationBell={true}
-          onNotificationToggle={handleNotificationToggle}
-          isNotificationEnabled={isNotificationEnabled}
-        />
-        
-        {/* Channel Navigation Tabs */}
+        {channel.bannerUrl && (
+            <img src={channel.bannerUrl} alt={`${channel.name} banner`} className="w-full h-32 sm:h-40 md:h-48 lg:h-64 object-cover" />
+        )}
+        <ChannelHeader channel={channel} onSubscribe={handleSubscribe} isSubscribed={isSubscribed} />
         <div className={`pb-0 sticky top-[71px] z-10 backdrop-blur-md border-b border-[${THEME_BORDER_PRIMARY}] h-[49px]`} style={{backgroundColor: `${channelPageTheme.bodyBgColor}CC`}}>
             <div className="flex px-2 md:px-4 md:justify-center gap-1 overflow-x-auto whitespace-nowrap no-scrollbar md:overflow-x-visible">
                 {CHANNEL_TABS.map(tab => (
@@ -623,143 +565,18 @@ export const ChannelPage: React.FC<PageProps> = ({ navigateTo, context, currentU
                 ))}
             </div>
         </div>
-
-        {/* Tab Content */}
-        {activeTab === 'Home' && (
-          <div className={`${FOOTER_HEIGHT_RESPONSIVE_PADDING}`}>
-            {/* Featured Video Section */}
-            {videos.length > 0 && (
-              <section className="p-4 md:p-6 lg:p-8">
-                <h3 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-lg font-semibold mb-4`}>Featured Video</h3>
-                <div className="max-w-2xl">
-                  <VideoCard video={videos[0]} type="home" onVideoClick={handleVideoClick} />
-                </div>
-              </section>
-            )}
-            
-            {/* Recent Uploads */}
-            <section className="p-4 md:p-6 lg:p-8 pt-0">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-lg font-semibold`}>Recent uploads</h3>
-                <button 
-                  onClick={() => setActiveTab('Videos')}
-                  className={`text-[${THEME_YELLOW_PRIMARY}] text-sm font-medium hover:underline`}
-                >
-                  View all
-                </button>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {videos.slice(0, 4).map(video => (
-                  <VideoCard key={video.id} video={video} type="channel" onVideoClick={handleVideoClick} />
-                ))}
-              </div>
-            </section>
-          </div>
-        )}
-
         {activeTab === 'Videos' && (
           <div className={`${FOOTER_HEIGHT_RESPONSIVE_PADDING}`}>
-            {/* Sort and View Controls */}
-            <div className="flex items-center justify-between p-4 md:px-6 lg:px-8 border-b border-[${THEME_BORDER_PRIMARY}]">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <SortIcon className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}]`} />
-                  <select 
-                    value={sortBy} 
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className={`bg-[${THEME_BG_SECONDARY}] text-[${THEME_TEXT_ON_DARK_PRIMARY}] border border-[${THEME_BORDER_PRIMARY}] rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-[${THEME_YELLOW_PRIMARY}]`}
-                  >
-                    {sortOptions.map(option => (
-                      <option key={option} value={option}>{option}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? `bg-[${THEME_YELLOW_PRIMARY}] text-[${THEME_YELLOW_BUTTON_TEXT}]` : `text-[${THEME_TEXT_ON_DARK_SECONDARY}] hover:bg-[${THEME_BG_TERTIARY_HOVER}]`}`}
-                >
-                  <GridIcon />
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? `bg-[${THEME_YELLOW_PRIMARY}] text-[${THEME_YELLOW_BUTTON_TEXT}]` : `text-[${THEME_TEXT_ON_DARK_SECONDARY}] hover:bg-[${THEME_BG_TERTIARY_HOVER}]`}`}
-                >
-                  <SortIcon />
-                </button>
-              </div>
-            </div>
-
-            {/* Videos Grid/List */}
-            <div className="p-4 md:p-6 lg:p-8">
-              {viewMode === 'grid' ? (
-                <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-x-3 gap-y-5">
-                  {videos.length > 0 ? videos.map(video => (
-                    <VideoCard key={video.id} video={video} type="channel" onVideoClick={handleVideoClick} />
-                  )) : <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-center col-span-full py-8`}>This channel has no videos yet.</p>}
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {videos.length > 0 ? videos.map(video => (
-                    <VideoCard key={video.id} video={video} type="search" onVideoClick={handleVideoClick} />
-                  )) : <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-center py-8`}>This channel has no videos yet.</p>}
-                </div>
-              )}
+            <h3 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-xl font-bold leading-tight tracking-tight px-4 md:px-6 lg:px-8 pb-3 pt-5`}>Uploads</h3>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-x-3 gap-y-5 p-4 md:p-6 lg:p-8 pt-0">
+              {videos.length > 0 ? videos.map(video => (
+                <VideoCard key={video.id} video={video} type="channel" onVideoClick={handleVideoClick} />
+              )) : <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-center col-span-full py-8`}>This channel has no videos yet.</p>}
             </div>
           </div>
         )}
-
-        {activeTab === 'Playlists' && (
-          <div className={`p-8 text-center text-[${THEME_TEXT_ON_DARK_SECONDARY}] ${FOOTER_HEIGHT_RESPONSIVE_PADDING}`}>
-            <h3 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-xl font-semibold mb-4`}>Playlists</h3>
-            <p>This channel hasn't created any playlists yet.</p>
-          </div>
-        )}
-
-        {activeTab === 'Community' && (
-          <div className={`p-8 text-center text-[${THEME_TEXT_ON_DARK_SECONDARY}] ${FOOTER_HEIGHT_RESPONSIVE_PADDING}`}>
-            <h3 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-xl font-semibold mb-4`}>Community</h3>
-            <p>Community posts will appear here.</p>
-          </div>
-        )}
-
-        {activeTab === 'About' && (
-          <div className={`p-4 md:p-6 lg:p-8 ${FOOTER_HEIGHT_RESPONSIVE_PADDING}`}>
-            <div className="max-w-2xl">
-              <h3 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-xl font-semibold mb-6`}>About {channel.name}</h3>
-              
-              <div className="space-y-6">
-                <div>
-                  <h4 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-lg font-medium mb-2`}>Channel Stats</h4>
-                  <div className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] space-y-1`}>
-                    <p>• {formatViews(channel.subscribersCount)} subscribers</p>
-                    <p>• {videos.length} videos</p>
-                    <p>• Joined YouTube on Jan 1, 2020</p>
-                  </div>
-                </div>
-                
-                {channel.description && (
-                  <div>
-                    <h4 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-lg font-medium mb-2`}>Description</h4>
-                    <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] leading-relaxed whitespace-pre-wrap`}>
-                      {channel.description}
-                    </p>
-                  </div>
-                )}
-                
-                <div>
-                  <h4 className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-lg font-medium mb-2`}>Links</h4>
-                  <div className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] space-y-1`}>
-                    <p>• Website: example.com</p>
-                    <p>• Twitter: @{channel.name.toLowerCase().replace(/\s+/g, '')}</p>
-                    <p>• Instagram: @{channel.name.toLowerCase().replace(/\s+/g, '')}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        {activeTab !== 'Videos' && (
+          <div className={`p-8 text-center text-[${THEME_TEXT_ON_DARK_SECONDARY}] ${FOOTER_HEIGHT_RESPONSIVE_PADDING}`}>Content for {activeTab} coming soon.</div>
         )}
       </main>
     </div>
@@ -970,9 +787,6 @@ export const AuthPage: React.FC<PageProps> = ({ navigateTo, context, currentUser
         case 'auth/weak-password': friendlyMessage = "Password is too weak. It should be at least 6 characters."; break;
         case 'auth/requires-recent-login': friendlyMessage = "This action requires a recent login. Please sign out and sign in again."; break;
         case 'auth/invalid-credential':  friendlyMessage = "Invalid login credentials. Please check your email and password, or sign up if you don't have an account."; break;
-        case 'auth/popup-blocked': friendlyMessage = "Popup was blocked by your browser. Please allow popups for this site and try again."; break;
-        case 'auth/popup-closed-by-user': friendlyMessage = "Sign-in was cancelled. Please try again."; break;
-        case 'auth/cancelled-popup-request': friendlyMessage = "Sign-in was cancelled. Please try again."; break;
         default:
             if (errorMessage && (errorMessage !== rawError.message || !rawError.code)) { friendlyMessage = errorMessage; } 
             else if (rawError.message) { friendlyMessage = rawError.message; }
@@ -982,27 +796,69 @@ export const AuthPage: React.FC<PageProps> = ({ navigateTo, context, currentUser
     } finally { setLoading(false); }
   };
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignIn = () => {
+    // Call signInWithGoogle directly without wrapping in handleAuthAction
+    // This ensures the popup is triggered immediately from user interaction
     setLoading(true);
     setError(null);
-    try {
-      await signInWithGoogle();
-    } catch (rawError: any) {
-      console.error("Google Sign-In error:", rawError);
-      let friendlyMessage = "Failed to sign in with Google. Please try again.";
-      
-      if (rawError.code === 'auth/popup-blocked') {
-        friendlyMessage = "Popup was blocked by your browser. Please allow popups for this site and try again.";
-      } else if (rawError.code === 'auth/popup-closed-by-user') {
-        friendlyMessage = "Sign-in was cancelled. Please try again.";
-      } else if (rawError.code === 'auth/cancelled-popup-request') {
-        friendlyMessage = "Sign-in was cancelled. Please try again.";
-      }
-      
-      setError(friendlyMessage);
-    } finally {
-      setLoading(false);
-    }
+    
+    signInWithGoogle()
+      .then(() => {
+        // Success will be handled by useEffect when currentUser changes
+      })
+      .catch((rawError: any) => {
+        console.error("Auth error:", rawError);
+        let errorCode = rawError.code; 
+        let errorMessage = rawError.message; 
+
+        if (rawError.error && typeof rawError.error === 'object') {
+          if (!errorCode && rawError.error.message) {
+              errorMessage = rawError.error.message;
+              if (rawError.error.message === 'INVALID_LOGIN_CREDENTIALS') {
+                  errorCode = 'auth/invalid-credential'; 
+              }
+          }
+        } else if (typeof rawError.message === 'string') {
+            try {
+                const parsedMessage = JSON.parse(rawError.message);
+                if (parsedMessage.error && parsedMessage.error.message) {
+                    if(!errorCode) errorMessage = parsedMessage.error.message;
+                    if (parsedMessage.error.message === 'INVALID_LOGIN_CREDENTIALS' && !errorCode) {
+                        errorCode = 'auth/invalid-credential';
+                    }
+                }
+            } catch (e) { /* Not JSON */ }
+        }
+
+        let friendlyMessage = "An unexpected error occurred. Please try again.";
+        switch (errorCode) {
+          case 'auth/popup-blocked': 
+            friendlyMessage = "Popup was blocked by your browser. Please allow popups for this site and try again."; 
+            break;
+          case 'auth/popup-closed-by-user': 
+            friendlyMessage = "Sign-in was cancelled. Please try again."; 
+            break;
+          case 'auth/cancelled-popup-request': 
+            friendlyMessage = "Another sign-in popup is already open. Please close it and try again."; 
+            break;
+          case 'auth/invalid-email': friendlyMessage = "Please enter a valid email address."; break;
+          case 'auth/user-disabled': friendlyMessage = "This account has been disabled."; break;
+          case 'auth/user-not-found': friendlyMessage = "No account found with this email. Please sign up or check your email."; break;
+          case 'auth/wrong-password': friendlyMessage = "Incorrect password. Please try again."; break;
+          case 'auth/email-already-in-use': friendlyMessage = "An account already exists with this email address."; break;
+          case 'auth/weak-password': friendlyMessage = "Password is too weak. It should be at least 6 characters."; break;
+          case 'auth/requires-recent-login': friendlyMessage = "This action requires a recent login. Please sign out and sign in again."; break;
+          case 'auth/invalid-credential':  friendlyMessage = "Invalid login credentials. Please check your email and password, or sign up if you don't have an account."; break;
+          default:
+              if (errorMessage && (errorMessage !== rawError.message || !rawError.code)) { friendlyMessage = errorMessage; } 
+              else if (rawError.message) { friendlyMessage = rawError.message; }
+              break;
+        }
+        setError(friendlyMessage);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const handleEmailSignIn = (e: React.FormEvent) => {

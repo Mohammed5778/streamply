@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Video, Channel, Playlist, Comment } from './types';
 import {
@@ -19,7 +20,7 @@ export const HomeIcon: React.FC<{ size?: string; className?: string; isFilled?: 
     isFilled ?
     <svg fill="currentColor" height={size} viewBox="0 0 256 256" width={size} className={className}><path d="M224,115.55V208a16,16,0,0,1-16,16H168a16,16,0,0,1-16-16V168a8,8,0,0,0-8-8H112a8,8,0,0,0-8,8v40a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V115.55a16,16,0,0,1,5.17-11.78l80-75.48.11-.11a16,16,0,0,1,21.53,0,1.14,1.14,0,0,0,.11.11l80,75.48A16,16,0,0,1,224,115.55Z"></path></svg>
     :
-    <svg fill="currentColor" height={size} viewBox="0 0 256 256" width={size} className={className}><path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11a16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"></path></svg>
+    <svg fill="currentColor" height={size} viewBox="0 0 256 256" width={size} className={className}><path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"></path></svg>
 );
 export const ShortsIcon: React.FC<{ size?: string; className?: string }> = ({ size = "24px", className }) => (
     <svg fill="currentColor" height={size} viewBox="0 0 256 256" width={size} className={className}><path d="M251.77,73a8,8,0,0,0-8.21.39L208,97.05V72a16,16,0,0,0-16-16H32A16,16,0,0,0,16,72V184a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V159l35.56,23.71A8,8,0,0,0,248,184a8,8,0,0,0,8-8V80A8,8,0,0,0,251.77,73ZM192,184H32V72H192V184Zm48-22.95-32-21.33V116.28L240,95Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="8"></path></svg>
@@ -44,7 +45,7 @@ export const UserIcon: React.FC<{ size?: string; className?: string; isFilled?: 
   isFilled ?
   <svg fill="currentColor" height={size} viewBox="0 0 256 256" width={size} className={className} xmlns="http://www.w3.org/2000/svg"><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/></svg>
   :
-  <svg fill="currentColor" height={size} viewBox="0 0 256 256" width={size} className={className} xmlns="http://www.w3.org/2000/svg"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,0,1-29.14-168.65C100.7,48.34,103.21,48,104,48a88.1,88.1,0,0,1,88,88,87.23,87.23,0,0,1-2.43,20.88A3.94,3.94,0,0,0,189.14,160c12,0,24.85,2.87,36.23,8.8A88.23,88.23,0,0,1,128,216Zm0-112a40,40,0,1,1,40,40A40,40,0,0,1,128,104Zm80,87.12C197.34,183.54,185.83,176,172,176a20.1,20.1,0,0,0-4.32.42a72,72,0,1,0-79.36,0A20.1,20.1,0,0,0,84,176c-13.83,0-25.34,7.54-36,15.12A87.66,87.66,0,0,1,40,128a88.1,88.1,0,0,1,88-88A88.1,88.1,0,0,1,216,128,87.66,87.66,0,0,1,208,191.12Z"/></svg>
+  <svg fill="currentColor" height={size} viewBox="0 0 256 256" width={size} className={className} xmlns="http://www.w3.org/2000/svg"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,0,1-29.14-168.65C100.7,48.34,103.21,48,104,48a88.1,88.1,0,0,1,88,88,87.23,87.23,0,0,1-2.43,20.88A3.94,3.94,0,0,0,189.14,160c12,0,24.85,2.87,36.23,8.8A88.23,88.23,0,0,1,128,216Zm0-112a40,40,0,1,1,40,40A40,40,0,0,1,128,104Zm80,87.12C197.34,183.54,185.83,176,172,176a20.1,20.1,0,0,0-4.32.42,72,72,0,1,0-79.36,0A20.1,20.1,0,0,0,84,176c-13.83,0-25.34,7.54-36,15.12A87.66,87.66,0,0,1,40,128a88.1,88.1,0,0,1,88-88A88.1,88.1,0,0,1,216,128,87.66,87.66,0,0,1,208,191.12Z"/></svg>
 );
 
 
@@ -120,25 +121,6 @@ export const GoogleIcon: React.FC<{ size?: string; className?: string }> = ({ si
     </svg>
 );
 
-// New icons for channel page
-export const BellIcon: React.FC<{ size?: string; className?: string; isFilled?: boolean }> = ({ size = "24px", className, isFilled }) => (
-  isFilled ?
-  <svg fill="currentColor" height={size} viewBox="0 0 256 256" width={size} className={className}><path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216Z"/></svg>
-  :
-  <svg fill="currentColor" height={size} viewBox="0 0 256 256" width={size} className={className}><path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216ZM48,184c7.7-13.24,16-43.92,16-80a64,64,0,1,1,128,0c0,36.05,8.28,66.73,16,80Z"/></svg>
-);
-
-export const CheckIcon: React.FC<{ size?: string; className?: string }> = ({ size = "16px", className }) => (
-  <svg fill="currentColor" height={size} viewBox="0 0 256 256" width={size} className={className}><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg>
-);
-
-export const SortIcon: React.FC<{ size?: string; className?: string }> = ({ size = "20px", className }) => (
-  <svg fill="currentColor" height={size} viewBox="0 0 256 256" width={size} className={className}><path d="M128,128a8,8,0,0,1-8,8H48a8,8,0,0,1,0-16h72A8,8,0,0,1,128,128ZM48,72H184a8,8,0,0,0,0-16H48a8,8,0,0,0,0,16ZM104,184H48a8,8,0,0,0,0,16h56a8,8,0,0,0,0-16Zm139.31-2.34a8,8,0,0,1-11.32,11.32L224,185l-7.99,7.98a8,8,0,0,1-11.32-11.32L217.37,169a8,8,0,0,1,11.32,0ZM224,71l7.99,7.98a8,8,0,0,0,11.32-11.32L230.63,55a8,8,0,0,0-11.32,0L206.63,67.66a8,8,0,0,0,11.32,11.32Z"/></svg>
-);
-
-export const GridIcon: React.FC<{ size?: string; className?: string }> = ({ size = "20px", className }) => (
-  <svg fill="currentColor" height={size} viewBox="0 0 256 256" width={size} className={className}><path d="M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48ZM104,136H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48Z"/></svg>
-);
 
 // Loading Spinner
 export const LoadingSpinner: React.FC = () => (
@@ -161,7 +143,7 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => (
 // Video Card Component
 interface VideoCardProps {
   video: Video;
-  type: 'home' | 'search' | 'channel' | 'upNext' | 'libraryHistory' | 'favoriteChannels';
+  type: 'home' | 'search' | 'channel' | 'upNext' | 'libraryHistory';
   onVideoClick: (videoId: string) => void;
   onChannelClick?: (channelId: string) => void;
 }
@@ -178,32 +160,6 @@ export const VideoCard: React.FC<VideoCardProps> = ({ video, type, onVideoClick,
   const views = formatViews(video.views);
   const uploadDate = typeof video.uploadDate === 'string' ? video.uploadDate : formatFirestoreTimestamp(video.lastWatched || video.uploadDate);
 
-  if (type === 'favoriteChannels') {
-    return (
-      <div className="flex flex-col gap-2 cursor-pointer group" onClick={handleVideoClick}>
-        <div className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg overflow-hidden shadow-sm group-hover:shadow-md transition-shadow">
-          <img src={video.thumbnailUrl || PLACEHOLDER_THUMBNAIL} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-        </div>
-        <div className="flex items-start gap-2">
-          <img
-            alt={video.channelName || 'Channel'}
-            className="size-6 rounded-full object-cover cursor-pointer flex-shrink-0"
-            src={video.channelAvatarUrl || PLACEHOLDER_AVATAR}
-            onClick={onChannelClick && video.channelId ? handleChannelClick : undefined}
-          />
-          <div className="min-w-0 flex-1">
-            <p className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-sm font-medium leading-tight line-clamp-2 group-hover:text-[${THEME_YELLOW_PRIMARY}] transition-colors`}>{video.title}</p>
-            <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-xs font-normal leading-normal mt-0.5`}>
-              {video.channelName || 'Unknown Channel'}
-            </p>
-            <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-xs font-normal leading-normal`}>
-              {views} views · {uploadDate}
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   if (type === 'home') {
     return (
@@ -297,64 +253,6 @@ export const VideoCard: React.FC<VideoCardProps> = ({ video, type, onVideoClick,
   return null;
 };
 
-// Channel Card Component for Favorite Channels section
-interface ChannelCardProps {
-  channel: Channel;
-  latestVideo?: Video;
-  onChannelClick: (channelId: string) => void;
-  onVideoClick?: (videoId: string) => void;
-}
-
-export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, latestVideo, onChannelClick, onVideoClick }) => {
-  const handleChannelClick = () => onChannelClick(channel.id);
-  const handleVideoClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (latestVideo && onVideoClick) {
-      onVideoClick(latestVideo.id);
-    }
-  };
-
-  return (
-    <div className="flex flex-col gap-3 cursor-pointer group" onClick={handleChannelClick}>
-      {/* Channel Avatar */}
-      <div className="flex items-center justify-center">
-        <img
-          src={channel.avatarUrl || PLACEHOLDER_AVATAR}
-          alt={channel.name}
-          className="size-16 rounded-full object-cover ring-2 ring-transparent group-hover:ring-yellow-400/50 transition-all duration-300"
-        />
-      </div>
-      
-      {/* Channel Info */}
-      <div className="text-center">
-        <p className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-sm font-semibold leading-tight group-hover:text-[${THEME_YELLOW_PRIMARY}] transition-colors line-clamp-1`}>
-          {channel.name}
-        </p>
-        <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-xs font-normal leading-normal mt-0.5`}>
-          {formatViews(channel.subscribersCount)} subscribers
-        </p>
-      </div>
-
-      {/* Latest Video (if available) */}
-      {latestVideo && (
-        <div className="cursor-pointer" onClick={handleVideoClick}>
-          <div className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg overflow-hidden shadow-sm group-hover:shadow-md transition-shadow">
-            <img src={latestVideo.thumbnailUrl || PLACEHOLDER_THUMBNAIL} alt={latestVideo.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-          </div>
-          <div className="mt-2">
-            <p className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-xs font-medium leading-tight line-clamp-2 group-hover:text-[${THEME_YELLOW_PRIMARY}] transition-colors`}>
-              {latestVideo.title}
-            </p>
-            <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-xs font-normal leading-normal mt-0.5`}>
-              {formatViews(latestVideo.views)} views · {formatFirestoreTimestamp(latestVideo.uploadDate)}
-            </p>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
 
 // Playlist Item Card
 interface PlaylistItemProps {
@@ -405,100 +303,31 @@ export const CommentItem: React.FC<CommentItemProps> = ({ comment }) => (
   </div>
 );
 
-// Enhanced Channel Header for Channel Page
+// Channel Header for Channel Page
 interface ChannelHeaderProps {
   channel: Channel;
   onSubscribe: () => void;
   isSubscribed?: boolean;
-  videosCount?: number;
-  showNotificationBell?: boolean;
-  onNotificationToggle?: () => void;
-  isNotificationEnabled?: boolean;
 }
-export const ChannelHeader: React.FC<ChannelHeaderProps> = ({ 
-  channel, 
-  onSubscribe, 
-  isSubscribed, 
-  videosCount,
-  showNotificationBell = false,
-  onNotificationToggle,
-  isNotificationEnabled = false
-}) => (
+export const ChannelHeader: React.FC<ChannelHeaderProps> = ({ channel, onSubscribe, isSubscribed }) => (
   <div className="flex p-6 @container items-center justify-center text-center">
-    <div className="flex flex-col gap-4 items-center max-w-2xl">
-      {/* Channel Banner (if available) */}
-      {channel.bannerUrl && (
-        <div className="w-full h-32 sm:h-40 md:h-48 rounded-xl overflow-hidden mb-4">
-          <img src={channel.bannerUrl} alt={`${channel.name} banner`} className="w-full h-full object-cover" />
-        </div>
-      )}
-      
-      {/* Channel Avatar */}
+    <div className="flex flex-col gap-4 items-center">
       <div
         className={`bg-center bg-no-repeat aspect-square bg-cover rounded-full size-32 ring-4 ring-[${THEME_YELLOW_PRIMARY}]/30 shadow-lg`}
         style={{ backgroundImage: `url("${channel.avatarUrl || PLACEHOLDER_AVATAR}")` }}
       ></div>
-      
-      {/* Channel Info */}
       <div className="flex flex-col items-center justify-center">
-        <div className="flex items-center gap-2 mb-2">
-          <p className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-2xl font-bold leading-tight tracking-tight`}>{channel.name}</p>
-          {isSubscribed && (
-            <div className={`flex items-center gap-1 bg-[${THEME_BG_SECONDARY}] px-2 py-1 rounded-full`}>
-              <CheckIcon className={`text-[${THEME_YELLOW_PRIMARY}]`} />
-              <span className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-xs font-medium`}>Verified</span>
-            </div>
-          )}
-        </div>
-        
-        <div className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-sm font-normal leading-normal mb-4 space-y-1`}>
-          <p>{formatViews(channel.subscribersCount)} subscribers</p>
-          <p>{videosCount || channel.videoCount} videos</p>
-        </div>
-        
-        {/* Channel Description (if available) */}
-        {channel.description && (
-          <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-sm leading-relaxed text-center max-w-md mb-4`}>
-            {channel.description}
-          </p>
-        )}
+        <p className={`text-[${THEME_TEXT_ON_DARK_PRIMARY}] text-2xl font-bold leading-tight tracking-tight`}>{channel.name}</p>
+        <p className={`text-[${THEME_TEXT_ON_DARK_SECONDARY}] text-sm font-normal leading-normal`}>
+          {formatViews(channel.subscribersCount)} subscribers · {channel.videoCount} videos
+        </p>
       </div>
-      
-      {/* Action Buttons */}
-      <div className="flex items-center gap-3">
-        <button
-          onClick={onSubscribe}
-          className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-200 ${
-            isSubscribed 
-              ? `bg-[${THEME_BG_SECONDARY}] text-[${THEME_TEXT_ON_DARK_PRIMARY}] hover:bg-[${THEME_BG_TERTIARY_HOVER}]`
-              : `bg-[${THEME_YELLOW_PRIMARY}] text-[${THEME_YELLOW_BUTTON_TEXT}] hover:opacity-90 shadow-lg`
-          }`}
-        >
-          {isSubscribed ? (
-            <>
-              <CheckIcon />
-              <span>Subscribed</span>
-            </>
-          ) : (
-            <span>Subscribe</span>
-          )}
-        </button>
-        
-        {/* Notification Bell (only show if subscribed) */}
-        {showNotificationBell && isSubscribed && onNotificationToggle && (
-          <button
-            onClick={onNotificationToggle}
-            className={`flex items-center justify-center p-2.5 rounded-full transition-colors ${
-              isNotificationEnabled 
-                ? `bg-[${THEME_YELLOW_PRIMARY}] text-[${THEME_YELLOW_BUTTON_TEXT}]`
-                : `bg-[${THEME_BG_SECONDARY}] text-[${THEME_TEXT_ON_DARK_PRIMARY}] hover:bg-[${THEME_BG_TERTIARY_HOVER}]`
-            }`}
-            title={isNotificationEnabled ? "Turn off notifications" : "Turn on notifications"}
-          >
-            <BellIcon isFilled={isNotificationEnabled} />
-          </button>
-        )}
-      </div>
+      <button
+        onClick={onSubscribe}
+        className={`bg-[${THEME_YELLOW_PRIMARY}] text-[${THEME_YELLOW_BUTTON_TEXT}] px-6 py-2.5 rounded-full text-sm font-bold hover:opacity-80 transition-opacity`}
+      >
+        {isSubscribed ? 'Subscribed' : 'Subscribe'}
+      </button>
     </div>
   </div>
 );
